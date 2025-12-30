@@ -3,40 +3,40 @@ import React, { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import { Menu, X, ArrowRight, Phone, Mail, Instagram, ExternalLink, Star } from "lucide-react";
 
-/* ---------- PRODUCT LIST (keep imgRef numeric strings 001..033) ---------- */
+/* ---------- PRODUCT LIST (imgRef numeric strings map to /public/chains/{n}.jpg) ---------- */
 const PRODUCTS = [
-  { id: "CHN-SLV-CRB-001", imgRef: "1", name: "Curb (Silver) - Round Heavy", category: "Silver Chains", metal: "Alloy - Iron", description: "Stylish and durable silver-toned curb chain features interlocking flat links that create a sleek and polished look.", image: null },
-  { id: "CHN-SLV-CRB-585-002", imgRef: "2", name: "Curb 585 Signature", category: "Silver Chains", metal: "Alloy - Iron", description: "Elegant and stylish silver chain with a classic curb link design.", image: null },
-  { id: "CHN-SLV-FHR-905-003", imgRef: "3", name: "Fisher 905 Link", category: "Silver Chains", metal: "Alloy - Iron", description: "Unique and intricate link design.", image: null },
-  { id: "CHN-SLV-CRBLN-004", imgRef: "4", name: "Curb Line Set", category: "Silver Chains", metal: "Alloy - Iron", description: "Set of two silver-toned curb chains.", image: null },
-  { id: "SNKCHN-SLV-1635-005", imgRef: "5", name: "Snake 1635 Silver", category: "Silver Chains", metal: "Alloy - Iron", description: "Elegant and sleek silver snake chain necklace.", image: null },
-  { id: "CHN-SLV-FHR-F70-006", imgRef: "6", name: "Fisher F70 Flashy", category: "Silver Chains", metal: "Alloy - Iron", description: "Premium polished silver Flashy Fisher Chain.", image: null },
-  { id: "SNKCHN-GLD-GOAL-007", imgRef: "7", name: "1635 Golden LG", category: "Gold Plated", metal: "Alloy - Iron", description: "Elegant gold-plated snake chain necklace.", image: null },
-  { id: "CHN-GLD-FGR-008", imgRef: "8", name: "Figaro Sachin", category: "Gold Plated", metal: "Alloy - Iron", description: "Premium polished gold figaro chain.", image: null },
-  { id: "CHN-GLD-CRB-585-009", imgRef: "9", name: "Curb Gold 585", category: "Gold Plated", metal: "Alloy - Iron", description: "Timeless gold plated chain with a classic Cuban link design.", image: null },
-  { id: "CHN-GLD-ROPE-010", imgRef: "10", name: "Rope Chain Gold", category: "Gold Plated", metal: "Alloy - Iron", description: "Exquisite gold-plated rope chain.", image: null },
-  { id: "CHN-GLD-S-OVAL-011", imgRef: "11", name: "S Oval Gold", category: "Gold Plated", metal: "Brass", description: "20-inch gold-plated chain necklace.", image: null },
-  { id: "CHN-GLD-ROUNDBOX-012", imgRef: "12", name: "Round Box Chain", category: "Gold Plated", metal: "Alloy - Iron", description: "Stylish box-link chain.", image: null },
-  { id: "CHN-GLD-BSKT-5003-013", imgRef: "13", name: "Basket-5003", category: "Gold Plated", metal: "Alloy - Iron", description: "Elegant twisted rope design.", image: null },
-  { id: "CHN-GLD-CRBDOT-014", imgRef: "14", name: "Curb Dot", category: "Gold Plated", metal: "Alloy - Iron", description: "22-inch gold chain necklace.", image: null },
-  { id: "CHN-GLD-20m3line-015", imgRef: "15", name: "20m 3 Line Pata", category: "Traditional", metal: "Brass", description: "Sleek and simple design.", image: null },
-  { id: "CHN-GLD-FLAT-016", imgRef: "16", name: "Flat - Mohini", category: "Traditional", metal: "Brass", description: "Sophisticated flat chain necklace.", image: null },
-  { id: "CHN-GLD-RICE-017", imgRef: "17", name: "Chaawal - Rice Chain", category: "Traditional", metal: "Brass", description: "Delicate, elegant chain.", image: null },
-  { id: "CHN-GLD-3868-018", imgRef: "18", name: "Patti - 3868", category: "Traditional", metal: "Alloy - Iron", description: "Stunning artificial gold-colored chain.", image: null },
-  { id: "CHN-SLV-ROUNDBOX-019", imgRef: "19", name: "Round Box Silver", category: "Silver Chains", metal: "Alloy - Iron", description: "Sleek 24-inch chain.", image: null },
-  { id: "SNKCHN-GLD-GOAL-020", imgRef: "20", name: "Snake Goal Chain", category: "Gold Plated", metal: "Brass", description: "Elegant gold-plated snake chain.", image: null },
-  { id: "CHN-GLD-SHWG-021", imgRef: "21", name: "Sehwag China", category: "Gold Plated", metal: "Alloy - Iron", description: "Elegant 22-inch gold chain.", image: null },
-  { id: "CHN-GLD-IMPSACHIN-022", imgRef: "22", name: "Imported Sachin Chain", category: "Imported", metal: "Alloy - Iron", description: "22-inch Figaro chain.", image: null },
-  { id: "CHN-GLD-IMPFGRLINE-023", imgRef: "23", name: "Imported Sachin Line", category: "Imported", metal: "Alloy - Iron", description: "Classic figaro line link design.", image: null },
-  { id: "CHN-GLD-IMPSACHINLW-024", imgRef: "24", name: "Imported Sachin Light", category: "Imported", metal: "Alloy - Iron", description: "Lightweight Figaro chain.", image: null },
-  { id: "CHN-GLD-8mmBEAD-025", imgRef: "25", name: "8mm Angoor Bead", category: "Beaded", metal: "Alloy - Iron", description: "30-inch bead chain.", image: null },
-  { id: "CHN-GLD-8mmLEAF-026", imgRef: "26", name: "8mm Leaf Welcome", category: "Traditional", metal: "Alloy - Iron", description: "Intricate interlocking links.", image: null },
-  { id: "BRCLT-FGR-027", imgRef: "27", name: "Figaro Bracelet", category: "Bracelets", metal: "Alloy - Iron", description: "Elegant Figaro chain bracelet.", image: null },
-  { id: "SLV-BRCLT-CURB-028", imgRef: "28", name: "Curb Bracelet Silver", category: "Bracelets", metal: "Alloy - Iron", description: "Bold silver chain bracelet.", image: null },
-  { id: "GLD-BRCLT-CURB-575-029", imgRef: "29", name: "575 Curb Bracelet", category: "Bracelets", metal: "Alloy - Iron", description: "Elegant gold-tone bracelet.", image: null },
-  { id: "SLV-BRCLT-ROPE-8003", imgRef: "30", name: "8003 Rope Bracelet", category: "Bracelets", metal: "Alloy - Iron", description: "Twisted rope bracelet.", image: null },
-  { id: "CHN-RD-PIPE-GLD-031", imgRef: "31", name: "Red Pipe (Square)", category: "Modern", metal: "Brass", description: "Sophisticated modern style.", image: null },
-  { id: "CHN-BLK-PIPE-GLD-032", imgRef: "32", name: "Black Pipe (Square)", category: "Modern", metal: "Brass", description: "Gold-tone finish.", image: null },
+  { id: "CHN-SLV-CRB-001", imgRef: "1", name: "Curb (Silver) - Round Heavy", category: "Silver Chains", metal: "Alloy - Iron", description: "Stylish and durable silver-toned curb chain features interlocking flat links that create a sleek and polished look." },
+  { id: "CHN-SLV-CRB-585-002", imgRef: "2", name: "Curb 585 Signature", category: "Silver Chains", metal: "Alloy - Iron", description: "Elegant and stylish silver chain with a classic curb link design." },
+  { id: "CHN-SLV-FHR-905-003", imgRef: "3", name: "Fisher 905 Link", category: "Silver Chains", metal: "Alloy - Iron", description: "Unique and intricate link design." },
+  { id: "CHN-SLV-CRBLN-004", imgRef: "4", name: "Curb Line Set", category: "Silver Chains", metal: "Alloy - Iron", description: "Set of two silver-toned curb chains." },
+  { id: "SNKCHN-SLV-1635-005", imgRef: "5", name: "Snake 1635 Silver", category: "Silver Chains", metal: "Alloy - Iron", description: "Elegant and sleek silver snake chain necklace." },
+  { id: "CHN-SLV-FHR-F70-006", imgRef: "6", name: "Fisher F70 Flashy", category: "Silver Chains", metal: "Alloy - Iron", description: "Premium polished silver Flashy Fisher Chain." },
+  { id: "SNKCHN-GLD-GOAL-007", imgRef: "7", name: "1635 Golden LG", category: "Gold Plated", metal: "Alloy - Iron", description: "Elegant gold-plated snake chain necklace." },
+  { id: "CHN-GLD-FGR-008", imgRef: "8", name: "Figaro Sachin", category: "Gold Plated", metal: "Alloy - Iron", description: "Premium polished gold figaro chain." },
+  { id: "CHN-GLD-CRB-585-009", imgRef: "9", name: "Curb Gold 585", category: "Gold Plated", metal: "Alloy - Iron", description: "Timeless gold plated chain with a classic Cuban link design." },
+  { id: "CHN-GLD-ROPE-010", imgRef: "10", name: "Rope Chain Gold", category: "Gold Plated", metal: "Alloy - Iron", description: "Exquisite gold-plated rope chain." },
+  { id: "CHN-GLD-S-OVAL-011", imgRef: "11", name: "S Oval Gold", category: "Gold Plated", metal: "Brass", description: "20-inch gold-plated chain necklace." },
+  { id: "CHN-GLD-ROUNDBOX-012", imgRef: "12", name: "Round Box Chain", category: "Gold Plated", metal: "Alloy - Iron", description: "Stylish box-link chain." },
+  { id: "CHN-GLD-BSKT-5003-013", imgRef: "13", name: "Basket-5003", category: "Gold Plated", metal: "Alloy - Iron", description: "Elegant twisted rope design." },
+  { id: "CHN-GLD-CRBDOT-014", imgRef: "14", name: "Curb Dot", category: "Gold Plated", metal: "Alloy - Iron", description: "22-inch gold chain necklace." },
+  { id: "CHN-GLD-20m3line-015", imgRef: "15", name: "20m 3 Line Pata", category: "Traditional", metal: "Brass", description: "Sleek and simple design." },
+  { id: "CHN-GLD-FLAT-016", imgRef: "16", name: "Flat - Mohini", category: "Traditional", metal: "Brass", description: "Sophisticated flat chain necklace." },
+  { id: "CHN-GLD-RICE-017", imgRef: "17", name: "Chaawal - Rice Chain", category: "Traditional", metal: "Brass", description: "Delicate, elegant chain." },
+  { id: "CHN-GLD-3868-018", imgRef: "18", name: "Patti - 3868", category: "Traditional", metal: "Alloy - Iron", description: "Stunning artificial gold-colored chain." },
+  { id: "CHN-SLV-ROUNDBOX-019", imgRef: "19", name: "Round Box Silver", category: "Silver Chains", metal: "Alloy - Iron", description: "Sleek 24-inch chain." },
+  { id: "SNKCHN-GLD-GOAL-020", imgRef: "20", name: "Snake Goal Chain", category: "Gold Plated", metal: "Brass", description: "Elegant gold-plated snake chain." },
+  { id: "CHN-GLD-SHWG-021", imgRef: "21", name: "Sehwag China", category: "Gold Plated", metal: "Alloy - Iron", description: "Elegant 22-inch gold chain." },
+  { id: "CHN-GLD-IMPSACHIN-022", imgRef: "22", name: "Imported Sachin Chain", category: "Imported", metal: "Alloy - Iron", description: "22-inch Figaro chain." },
+  { id: "CHN-GLD-IMPFGRLINE-023", imgRef: "23", name: "Imported Sachin Line", category: "Imported", metal: "Alloy - Iron", description: "Classic figaro line link design." },
+  { id: "CHN-GLD-IMPSACHINLW-024", imgRef: "24", name: "Imported Sachin Light", category: "Imported", metal: "Alloy - Iron", description: "Lightweight Figaro chain." },
+  { id: "CHN-GLD-8mmBEAD-025", imgRef: "25", name: "8mm Angoor Bead", category: "Beaded", metal: "Alloy - Iron", description: "30-inch bead chain." },
+  { id: "CHN-GLD-8mmLEAF-026", imgRef: "26", name: "8mm Leaf Welcome", category: "Traditional", metal: "Alloy - Iron", description: "Intricate interlocking links." },
+  { id: "BRCLT-FGR-027", imgRef: "27", name: "Figaro Bracelet", category: "Bracelets", metal: "Alloy - Iron", description: "Elegant Figaro chain bracelet." },
+  { id: "SLV-BRCLT-CURB-028", imgRef: "28", name: "Curb Bracelet Silver", category: "Bracelets", metal: "Alloy - Iron", description: "Bold silver chain bracelet." },
+  { id: "GLD-BRCLT-CURB-575-029", imgRef: "29", name: "575 Curb Bracelet", category: "Bracelets", metal: "Alloy - Iron", description: "Elegant gold-tone bracelet." },
+  { id: "SLV-BRCLT-ROPE-8003", imgRef: "30", name: "8003 Rope Bracelet", category: "Bracelets", metal: "Alloy - Iron", description: "Twisted rope bracelet." },
+  { id: "CHN-RD-PIPE-GLD-031", imgRef: "31", name: "Red Pipe (Square)", category: "Modern", metal: "Brass", description: "Sophisticated modern style." },
+  { id: "CHN-BLK-PIPE-GLD-032", imgRef: "32", name: "Black Pipe (Square)", category: "Modern", metal: "Brass", description: "Gold-tone finish." },
 ];
 
 /* ---------------- THREE.JS BACKGROUND (unchanged) ---------------- */
@@ -139,9 +139,7 @@ export default function App() {
   const [visibleCount, setVisibleCount] = useState(9);
   const [logoError, setLogoError] = useState(false);
 
-  // categories
   const categories = ["All", ...Array.from(new Set(PRODUCTS.map(p => p.category)))];
-
   const filteredProducts = activeCategory === "All" ? PRODUCTS : PRODUCTS.filter(p => p.category === activeCategory);
   const displayedProducts = filteredProducts.slice(0, visibleCount);
 
@@ -156,7 +154,6 @@ export default function App() {
 
   const handleImageError = (e) => {
     e.target.onerror = null;
-    // fallback to Unsplash placeholder if file missing
     e.target.src = "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?auto=format&fit=crop&q=80&w=800";
   };
 
@@ -172,7 +169,7 @@ export default function App() {
               <div className="h-10 w-10 rounded-full border border-yellow-500 overflow-hidden flex items-center justify-center bg-black shadow-[0_0_10px_rgba(234,179,8,0.3)]">
                 {!logoError ? (
                   <img
-                    src="/logo.png"
+                    src="/chains/logo.jpg"
                     alt="SMC Logo"
                     className="w-full h-full object-cover"
                     onError={() => setLogoError(true)}
@@ -274,7 +271,7 @@ export default function App() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {displayedProducts.map((product) => {
-              const imgSrc = product.image ? product.image : `/chains/${product.imgRef}.jpg`;
+              const imgSrc = `/chains/${product.imgRef}.jpg`;
               return (
                 <div key={product.id} className="group relative bg-zinc-900/40 border border-white/5 hover:border-yellow-600/40 transition-all duration-500 overflow-hidden flex flex-col">
                   <div className="relative h-72 bg-gradient-to-b from-zinc-800/50 to-black/80 overflow-hidden flex items-center justify-center p-6 group-hover:bg-zinc-800/30 transition-colors">
@@ -291,10 +288,7 @@ export default function App() {
                       className="w-full h-full object-cover absolute inset-0 opacity-80 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700"
                     />
 
-                    <div className="absolute bottom-0 left-0 w-full p-4 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300 bg-black/90 border-t border-white/10 flex justify-between items-center backdrop-blur-md">
-                      <span className="text-xs text-gray-400 uppercase tracking-wider">In Stock</span>
-        
-                    </div>
+                    {/* overlay removed: no "In Stock" or "Details" */}
                   </div>
 
                   <div className="p-6 flex-1 flex flex-col border-t border-white/5 bg-black/20">
@@ -319,7 +313,7 @@ export default function App() {
         </div>
       </section>
 
-      {/* FOOTER */}
+      {/* FOOTER / CONTACT — updated details */}
       <footer id="contact" className="bg-black border-t border-white/10 relative z-10 pt-20 pb-10">
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
@@ -333,17 +327,35 @@ export default function App() {
               <p className="text-gray-500 max-w-sm mb-8 leading-relaxed font-light text-sm">
                 Redefining the standards of imitation jewelry since 1995. We combine traditional artistry with modern manufacturing.
               </p>
+
+              <div className="space-y-2 mb-6">
+                <div className="text-gray-300">
+                  <strong>Sanjay Jain</strong> — <a href="tel:+919319217290" className="text-yellow-500 hover:underline">+91 93192 17290</a>
+                </div>
+                <div className="text-gray-300">
+                  <strong>Utsav Jain</strong> — <a href="tel:+918954752289" className="text-yellow-500 hover:underline">+91 89547 52289</a>
+                </div>
+                <div className="text-gray-300">
+                  <a href="mailto:Shrimahalaxmichains@gmail.com" className="text-yellow-500 hover:underline">Shrimahalaxmichains@gmail.com</a>
+                </div>
+                <div className="text-gray-300">
+                  26/33, Ahir Para, Raja Ki Mandi, Agra - 282002
+                </div>
+              </div>
+
               <div className="flex gap-4">
                 <a href="#" className="w-10 h-10 rounded-full bg-zinc-900 border border-white/10 flex items-center justify-center hover:bg-yellow-600 hover:text-black hover:border-yellow-600 transition-all"><Instagram size={18} /></a>
-                <a href="#" className="w-10 h-10 rounded-full bg-zinc-900 border border-white/10 flex items-center justify-center hover:bg-yellow-600 hover:text-black hover:border-yellow-600 transition-all"><Mail size={18} /></a>
+                <a href="mailto:Shrimahalaxmichains@gmail.com" className="w-10 h-10 rounded-full bg-zinc-900 border border-white/10 flex items-center justify-center hover:bg-yellow-600 hover:text-black hover:border-yellow-600 transition-all"><Mail size={18} /></a>
+                <a href="#" className="w-10 h-10 rounded-full bg-zinc-900 border border-white/10 flex items-center justify-center hover:bg-yellow-600 hover:text-black hover:border-yellow-600 transition-all"><ExternalLink size={18} /></a>
               </div>
             </div>
+
             <div>
               <h3 className="text-white font-serif text-lg mb-6">Contact</h3>
               <ul className="space-y-4 text-gray-500 text-sm">
-                <li className="flex items-start gap-3"><Phone size={16} className="text-yellow-600 mt-1" /><span>+91 98765 43210</span></li>
-                <li className="flex items-start gap-3"><Mail size={16} className="text-yellow-600 mt-1" /><span>sales@smchains.com</span></li>
-                <li className="flex items-start gap-3"><div className="mt-1"><ExternalLink size={16} className="text-yellow-600" /></div><span>Agra, Uttar Pradesh<br/>India</span></li>
+                <li className="flex items-start gap-3"><Phone size={16} className="text-yellow-600 mt-1" /><span><a href="tel:+919319217290">+91 93192 17290</a></span></li>
+                <li className="flex items-start gap-3"><Mail size={16} className="text-yellow-600 mt-1" /><span><a href="mailto:Shrimahalaxmichains@gmail.com">Shrimahalaxmichains@gmail.com</a></span></li>
+                <li className="flex items-start gap-3"><div className="mt-1"><ExternalLink size={16} className="text-yellow-600" /></div><span>26/33, Ahir Para, Raja Ki Mandi<br/>Agra - 282002</span></li>
               </ul>
             </div>
           </div>
