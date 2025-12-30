@@ -293,7 +293,7 @@ export default function App() {
 
                     <div className="absolute bottom-0 left-0 w-full p-4 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300 bg-black/90 border-t border-white/10 flex justify-between items-center backdrop-blur-md">
                       <span className="text-xs text-gray-400 uppercase tracking-wider">In Stock</span>
-                      <button className="text-yellow-500 text-xs font-bold uppercase tracking-widest hover:text-white transition-colors">Details &rarr;</button>
+        
                     </div>
                   </div>
 
