@@ -37,7 +37,6 @@ const PRODUCTS = [
   { id: "SLV-BRCLT-ROPE-8003", imgRef: "30", name: "8003 Rope Bracelet", category: "Bracelets", metal: "Alloy - Iron", description: "Twisted rope bracelet.", image: null },
   { id: "CHN-RD-PIPE-GLD-031", imgRef: "31", name: "Red Pipe (Square)", category: "Modern", metal: "Brass", description: "Sophisticated modern style.", image: null },
   { id: "CHN-BLK-PIPE-GLD-032", imgRef: "32", name: "Black Pipe (Square)", category: "Modern", metal: "Brass", description: "Gold-tone finish.", image: null },
-  { id: "CHN-BLK-DOT-033", imgRef: "33", name: "Black Dot Sequence", category: "Modern", metal: "Brass", description: "Subtle sequence detailing.", image: null }
 ];
 
 /* ---------------- THREE.JS BACKGROUND (unchanged) ---------------- */
