@@ -99,6 +99,7 @@ const AnimatedBackground = () => {
 
   renderer.render(scene, camera);
 };
+animate();
 
 
     const handleResize = () => {
