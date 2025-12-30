@@ -90,19 +90,16 @@ const AnimatedBackground = () => {
     const particles = new THREE.Points(geometry, material);
     scene.add(particles);
 
-    let mouseX = 0;
-    let mouseY = 0;
-
     const animate = () => {
-      requestAnimationFrame(animate);
-      particles.rotation.y += 0.0002;
-      particles.rotation.x += 0.0001;
-      particles.rotation.x += mouseY * 0.00005;
-      particles.rotation.y += mouseX * 0.00005;
-      renderer.render(scene, camera);
-    };
+  requestAnimationFrame(animate);
 
-    animate();
+  // ultra-slow autonomous movement
+  particles.rotation.y += 0.00012;
+  particles.rotation.x += 0.00005;
+
+  renderer.render(scene, camera);
+};
+
 
     const handleResize = () => {
       camera.aspect = window.innerWidth / window.innerHeight;
