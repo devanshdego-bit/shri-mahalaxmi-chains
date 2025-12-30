@@ -319,9 +319,14 @@ export default function App() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
             <div className="lg:col-span-2">
               <div className="flex items-center gap-2 mb-6">
-                <div className="h-8 w-8 rounded-full border border-yellow-500 flex items-center justify-center bg-transparent">
-                  <span className="text-yellow-500 font-serif font-bold text-lg">S</span>
-                </div>
+                <div className="h-10 w-10 rounded-full border border-yellow-500 overflow-hidden bg-black flex items-center justify-center">
+  <img
+    src="/chains/logo.jpg"
+    alt="Shri Mahalaxmi Chains Logo"
+    className="w-full h-full object-cover"
+  />
+</div>
+
                 <span className="font-serif text-xl font-bold text-white tracking-wide">SHRI MAHALAXMI CHAINS</span>
               </div>
               <p className="text-gray-500 max-w-sm mb-8 leading-relaxed font-light text-sm">
